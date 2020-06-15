@@ -4,7 +4,7 @@ import pandas as pd
 import altair as alt
 
 
-def show_factorRegression(fundList,env):
+def show_factorRegression(fundList):
 
     fundChosen = st.sidebar.multiselect("Fund", options=fundList)
 
@@ -33,8 +33,8 @@ def show_factorRegression(fundList,env):
     factorRegressionInput['end_date'] = endDate
     factorRegressionInput['regressionFactors'] = factors
 
-    def factorRegression(factorRegressionInput,env):
-        url = f"{env}/factorRegression/"
+    def factorRegression(factorRegressionInput):
+        url = "http://api:8000/factorRegression/"
         response = requests.post(url=url, json=factorRegressionInput)
         factorRegressionData = response.json()
         return factorRegressionData
@@ -49,7 +49,7 @@ def show_factorRegression(fundList,env):
         fundToRegress = []
         fundToRegress.append(fundChosen[y])
         factorRegressionInput['codeList'] = fundToRegress
-        factorRegressionData = factorRegression(factorRegressionInput,env)
+        factorRegressionData = factorRegression(factorRegressionInput)
         coefficientColumns = ["coeff", "pvals", "conf_lower", "conf_higher"]
         outputRegression[fundChosen[y]] = pd.DataFrame(
             factorRegressionData)[coefficientColumns]
@@ -73,13 +73,13 @@ def show_factorRegression(fundList,env):
             summaryRegression[y]), max_value=max(summaryRegression[y]), step=0.01)
         optimizeFactorData["optimization"][y] = sliders[y]
 
-    def optimizeFactor(optimizeFactorInput,env):
-        url = f"{env}/optimizeFactor/"
+    def optimizeFactor(optimizeFactorInput):
+        url = "http://api:8000/optimizeFactor/"
         response = requests.post(url=url, json=optimizeFactorInput)
         optimizeFactorData = response.json()
         return optimizeFactorData
 
-    optimizedPortfolio = optimizeFactor(optimizeFactorData,env)
+    optimizedPortfolio = optimizeFactor(optimizeFactorData)
 
     source = pd.DataFrame({
         'Fund': fundChosen,

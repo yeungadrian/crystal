@@ -4,7 +4,7 @@ import pandas as pd
 import altair as alt
 import json
 
-def show_assetAnalysis(fundList,env):
+def show_assetAnalysis(fundList):
 
     fundChosen = st.sidebar.multiselect("Fund", options=fundList)
 
@@ -20,23 +20,23 @@ def show_assetAnalysis(fundList,env):
         'end_date': endDate
     }
 
-    def correlationGet(assetAnalysisInput,env):
-        url = f'{env}/assetAnalysis/correlation'
+    def correlationGet(assetAnalysisInput):
+        url = "http://api:8000/assetAnalysis/correlation"
         response = requests.post(url=url, json=assetAnalysisInput)
         correlationData = response.json()
         return correlationData
 
     correlationMatrix = pd.DataFrame(
-        correlationGet(assetAnalysisInput,env)['correlation'])
+        correlationGet(assetAnalysisInput)['correlation'])
 
-    def rollingGet(assetAnalysisInput,env):
+    def rollingGet(assetAnalysisInput):
         assetAnalysisInput['codelist'] = assetAnalysisInput['codelist'][0:2]
-        url = f'{env}/assetAnalysis/rollingCorrelation'
+        url = "http://api:8000/assetAnalysis/rollingCorrelation"
         response = requests.post(url=url, json=assetAnalysisInput)
         rollingData = response.json()
         return rollingData
     
-    rollingData = pd.DataFrame({'correlation': rollingGet(assetAnalysisInput,env)})
+    rollingData = pd.DataFrame({'correlation': rollingGet(assetAnalysisInput)})
     rollingData = rollingData.reset_index(drop = False)
     rollingData['index'] = pd.to_datetime(rollingData['index'])
     
@@ -45,13 +45,13 @@ def show_assetAnalysis(fundList,env):
         y='correlation'
     ).properties(width=700)
 
-    def cointegrationGet(assetAnalysisInput,env):
-        url = f"{env}/assetAnalysis/cointegration"
+    def cointegrationGet(assetAnalysisInput):
+        url = "http://api:8000/assetAnalysis/cointegration"
         response = requests.post(url=url, json=assetAnalysisInput)
         cointegrationData = response.json()
         return cointegrationData
 
-    cointegrationData = cointegrationGet(assetAnalysisInput,env)
+    cointegrationData = cointegrationGet(assetAnalysisInput)
 
     cointegrationDF = pd.DataFrame(cointegrationData)
 

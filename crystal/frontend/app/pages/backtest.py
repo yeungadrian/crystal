@@ -5,7 +5,7 @@ import altair as alt
 import streamlit as st
 
 
-def show_backtest(fundList,env):
+def show_backtest(fundList):
 
     start_date = st.sidebar.date_input("Start Date")
     end_date = st.sidebar.date_input("End Date")
@@ -45,8 +45,8 @@ def show_backtest(fundList,env):
     backtestRequest['rebalance_frequency'] = rebalanceFrequency
 
     @st.cache(allow_output_mutation=True)
-    def backtest(env):
-        url = f"{env}/backtest/"
+    def backtest():
+        url = "http://api:8000/backtest/"
         response = requests.post(url=url, json=backtestRequest)
         backtestData = response.json()
         backtestData = pd.DataFrame(backtestData['backtest'])
@@ -58,8 +58,8 @@ def show_backtest(fundList,env):
             'backtestMetrics': backtestMetrics
         }
 
-    backtestData = backtest(env)['backtestData']
-    backtestMetrics = backtest(env)['backtestMetrics']
+    backtestData = backtest()['backtestData']
+    backtestMetrics = backtest()['backtestMetrics']
     if 'annual returns' in backtestMetrics:
         backtestMetrics.pop('annual returns')
 

@@ -5,7 +5,7 @@ import altair as alt
 import json
 
 
-def show_efficientFrontier(fundList,env):
+def show_efficientFrontier(fundList):
     fundChosen = st.sidebar.multiselect("Fund", options=fundList)
 
     start_date = st.sidebar.date_input("Start Date")
@@ -20,13 +20,13 @@ def show_efficientFrontier(fundList,env):
         'end_date': endDate
     }
     @st.cache
-    def assetreturns(efficientFrontierInput,env):
-        url = f"{env}/efficientFrontier/individualReturns"
+    def assetreturns(efficientFrontierInput):
+        url = "http://api:8000/efficientFrontier/individualReturns"
         response = requests.post(url=url, json=efficientFrontierInput)
         frontierData = response.json()
         return frontierData
 
-    assetDataDF = pd.DataFrame(assetreturns(efficientFrontierInput,env))
+    assetDataDF = pd.DataFrame(assetreturns(efficientFrontierInput))
     assetDataDF['date'] = pd.to_datetime(assetDataDF['date'])
 
     assetPriceChart = alt.Chart(assetDataDF).mark_line().encode(
@@ -51,13 +51,13 @@ def show_efficientFrontier(fundList,env):
     }
 
     @st.cache
-    def simulatedFrontier(simulatedFrontierInput,env):
-        url = f"{env}/efficientFrontier/simulatedFrontier"
+    def simulatedFrontier(simulatedFrontierInput):
+        url = "http://api:8000/efficientFrontier/simulatedFrontier"
         response = requests.post(url=url, json=simulatedFrontierInput)
         simulatedData = response.json()
         return simulatedData
 
-    simulatedDataDF = pd.DataFrame(simulatedFrontier(simulatedFrontierInput,env))
+    simulatedDataDF = pd.DataFrame(simulatedFrontier(simulatedFrontierInput))
 
     simulatedChart = alt.Chart(simulatedDataDF).mark_circle(size=10,color = 'lightgrey',opacity=0.2).encode(
         x='Volatility',
@@ -67,13 +67,13 @@ def show_efficientFrontier(fundList,env):
         alt.selection_interval(bind='scales')
     )
     
-    def efficientFrontier(efficientFrontierInput,env):
-        url = f"{env}/efficientFrontier/efficientFrontier"
+    def efficientFrontier(efficientFrontierInput):
+        url = "http://api:8000/efficientFrontier/efficientFrontier"
         response = requests.post(url=url, json=efficientFrontierInput)
         frontierData = response.json()
         return frontierData
 
-    frontierDataDF = pd.DataFrame(efficientFrontier(efficientFrontierInput,env))
+    frontierDataDF = pd.DataFrame(efficientFrontier(efficientFrontierInput))
 
     frontierChart = alt.Chart(frontierDataDF).mark_circle(size=15,color = 'green',opacity = 0.6).encode(
         x='Volatility',
@@ -83,13 +83,13 @@ def show_efficientFrontier(fundList,env):
         alt.selection_interval(bind='scales')
     )
 
-    def stockData(efficientFrontierInput,env):
-        url = f"{env}/efficientFrontier/meanvariance"
+    def stockData(efficientFrontierInput):
+        url = "http://api:8000/efficientFrontier/meanvariance"
         response = requests.post(url=url, json=efficientFrontierInput)
         stockData = response.json()
         return stockData
 
-    plotStocksDF = pd.DataFrame(stockData(efficientFrontierInput,env))
+    plotStocksDF = pd.DataFrame(stockData(efficientFrontierInput))
 
     stockChart = alt.Chart(plotStocksDF).mark_circle(size=30).encode(
         x='Volatility',

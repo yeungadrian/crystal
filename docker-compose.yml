@@ -7,6 +7,14 @@ services:
         volumes:
             - ./crystal/backend/:/usr/src/crystal
         ports:
-            - 8002:8000
+            - 8000:8000
         image: crystal_api:latest
+    app:
+        build: ./crystal/frontend
+        command: streamlit run app/main.py --server.port 8501
+        volumes:
+            - ./crystal/frontend/:/usr/src/streamlit
+        ports:
+            - 8501:8501
+        image: crystal:latest
 
