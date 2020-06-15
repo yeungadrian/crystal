@@ -11,10 +11,8 @@ services:
         image: crystal_api:latest
     app:
         build: ./crystal/frontend
-        command: streamlit run app/main.py --server.port 8501
+        command: streamlit run app/main.py
         volumes:
             - ./crystal/frontend/:/usr/src/streamlit
-        ports:
-            - 8501:8501
         image: crystal:latest
 
