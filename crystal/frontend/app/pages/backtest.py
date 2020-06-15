@@ -7,9 +7,6 @@ import streamlit as st
 
 def show_backtest(fundList):
 
-    start_date = st.sidebar.date_input("Start Date")
-    end_date = st.sidebar.date_input("End Date")
-
     initialAmount = st.sidebar.number_input("Initial Amount", min_value=0.0)
 
     fundsChosen = st.sidebar.multiselect(
@@ -23,6 +20,10 @@ def show_backtest(fundList):
             Allocation.append(temporaryAllocation)
 
     benchmark = st.sidebar.selectbox("Benchmark", fundList)
+
+    start_date = st.sidebar.date_input("Start Date")
+    end_date = st.sidebar.date_input("End Date")
+
 
 
     startDate = start_date.strftime("%Y-%m-%d")
