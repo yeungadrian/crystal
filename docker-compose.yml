@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+    api:
+        build: ./crystal/backend/
+        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+        volumes:
+            - ./crystal/backend/:/usr/src/crystal
+        ports:
+            - 8002:8000
+        image: crystal_api:latest
+
