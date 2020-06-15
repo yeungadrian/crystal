@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+    api:
+        build: ./crystal/backend/
+        command: uvicorn app.main:app --reload --workers 1 --host 0.0.0.0 --port 8000
+        volumes:
+            - ./crystal/backend/:/usr/src/crystal
+        ports:
+            - 8000:8000
+        image: crystal_api:latest
+    app:
+        build: ./crystal/frontend
+        command: streamlit run app/main.py --server.port 8501
+        volumes:
+            - ./crystal/frontend/:/usr/src/streamlit
+        ports:
+            - 8501:8501
+        image: crystal:latest
+
