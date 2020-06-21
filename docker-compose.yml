@@ -16,5 +16,5 @@ services:
             - ./crystal/frontend/:/usr/src/streamlit
         ports:
             - 8501:8501
-        image: crystal:latest
+        image: crystal_app:latest
 
