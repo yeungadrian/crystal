@@ -24,8 +24,6 @@ def show_backtest(fundList):
     start_date = st.sidebar.date_input("Start Date")
     end_date = st.sidebar.date_input("End Date")
 
-
-
     startDate = start_date.strftime("%Y-%m-%d")
     endDate = end_date.strftime("%Y-%m-%d")
 
